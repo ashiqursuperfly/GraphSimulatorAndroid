@@ -15,8 +15,8 @@ import s.ashiqur.graphsimulator.graph.AnimatableGraph;
 import s.ashiqur.graphsimulator.graph.GraphView;
 import s.ashiqur.graphsimulator.R;
 
-import static s.ashiqur.graphsimulator.graph.GraphConstants.EDGECOLOR;
-import static s.ashiqur.graphsimulator.graph.GraphConstants.YELLOW;
+import static s.ashiqur.graphsimulator.graph.AnimatableGraphConstants.EDGECOLOR;
+import static s.ashiqur.graphsimulator.graph.AnimatableGraphConstants.YELLOW;
 
 
 public class BfsDfsView extends View implements GraphView {
@@ -28,23 +28,18 @@ public class BfsDfsView extends View implements GraphView {
     private Paint paintCircle;
     private Paint paintArrow;
 
-    @Override
-    public void setGraph(AnimatableGraph graph) {
-        this.graph = graph;
-    }
-
     public BfsDfsView(Context context) {
         super(context);
 
         init(null);
     }
 
-
     public BfsDfsView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         init(attrs);
     }
+
 
     public BfsDfsView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -57,6 +52,11 @@ public class BfsDfsView extends View implements GraphView {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         init(attrs);
+    }
+
+    @Override
+    public void setGraph(AnimatableGraph graph) {
+        this.graph = graph;
     }
 
     private void init(@Nullable AttributeSet set) {
@@ -85,7 +85,7 @@ public class BfsDfsView extends View implements GraphView {
     @Override
     protected void onDraw(Canvas canvas) {
         // NEVER D0 THIS->this.canvas=canvas;
-        BfsDfsGraph bfsDfsGraph = (BfsDfsGraph)graph;
+        BfsDfsGraph bfsDfsGraph = (BfsDfsGraph) graph;
         super.onDraw(canvas);
 
         if (!bfsDfsGraph.isDirected()) {
@@ -94,7 +94,7 @@ public class BfsDfsView extends View implements GraphView {
                     if (bfsDfsGraph.isEdge(i, j)) {
                         Button t1 = bfsDfsGraph.getNodeButtons().get(i);
                         Button t2 = bfsDfsGraph.getNodeButtons().get(j);
-                        GraphDrawUtil.drawUndirectedEdge(canvas,t1,t2,paintLine);
+                        GraphDrawUtil.drawUndirectedEdge(canvas, t1, t2, paintLine);
                         //System.out.println("Edge drawn :"+i+" "+j);
                     }
                 }
@@ -109,10 +109,10 @@ public class BfsDfsView extends View implements GraphView {
 
                         if (!bfsDfsGraph.isEdge(j, i)) {
                             //canvas.drawLine(t1.getX() + (int) Sizes.NodeSize.value / 2, t1.getY() + (int) Sizes.NodeSize.value / 2, t2.getX() + (int) Sizes.NodeSize.value / 2, t2.getY() + (int) Sizes.NodeSize.value / 2, paintLine);
-                            GraphDrawUtil.drawDirectedEdge(canvas,t1,t2,paintLine,paintArrow);
+                            GraphDrawUtil.drawDirectedEdge(canvas, t1, t2, paintLine, paintArrow);
                         } else {
                             //canvas.drawLine(t1.getX() + (int) Sizes.NodeSize.value / 2, t1.getY() + (int) Sizes.NodeSize.value / 2, t2.getX() + (int) Sizes.NodeSize.value / 2, t2.getY() + (int) Sizes.NodeSize.value / 2, paintLine);
-                            GraphDrawUtil.drawDirectedEdge(canvas,t1,t2,paintLine,paintArrow);
+                            GraphDrawUtil.drawDirectedEdge(canvas, t1, t2, paintLine, paintArrow);
                         }
 
                     }

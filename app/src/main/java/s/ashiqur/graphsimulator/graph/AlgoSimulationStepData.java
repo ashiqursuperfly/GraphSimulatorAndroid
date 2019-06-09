@@ -2,12 +2,12 @@ package s.ashiqur.graphsimulator.graph;
 
 import android.widget.Button;
 
-public class AlgoSimulationData {
+public class AlgoSimulationStepData {
 
     private Button nodeButton;
     private int color;
 
-    public AlgoSimulationData(Button nodeButton, int color) {
+    public AlgoSimulationStepData(Button nodeButton, int color) {
         this.nodeButton = nodeButton;
         this.color = color;
     }

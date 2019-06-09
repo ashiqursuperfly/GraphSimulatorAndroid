@@ -15,22 +15,25 @@ import java.util.concurrent.BlockingQueue;
 import s.ashiqur.graphsimulator.R;
 import s.ashiqur.graphsimulator.Sizes;
 
-import static s.ashiqur.graphsimulator.graph.GraphConstants.NODETEXTCOLOR;
-/** We Are using a Button as a Node and using customView DrawLine to draw edges**/
+import static s.ashiqur.graphsimulator.graph.AnimatableGraphConstants.NODETEXTCOLOR;
+
+/**
+ * We Are using a Button as a Node and using customView DrawLine to draw edges
+ **/
 public class GraphDrawUtil {
 
     private static final String TAG = "DrawUtil";
 
-    public static void drawUndirectedEdge(Canvas canvas, Button srcNode, Button destNode, Paint paintLine){
+    public static void drawUndirectedEdge(Canvas canvas, Button srcNode, Button destNode, Paint paintLine) {
         canvas.drawLine((srcNode.getX() + (int) Sizes.NodeSize.value / 2),
-                 (srcNode.getY() + (int) Sizes.NodeSize.value / 2),
-                 (destNode.getX() + (int) Sizes.NodeSize.value / 2),
-                 (destNode.getY() + (int) Sizes.NodeSize.value / 2), paintLine);
+                (srcNode.getY() + (int) Sizes.NodeSize.value / 2),
+                (destNode.getX() + (int) Sizes.NodeSize.value / 2),
+                (destNode.getY() + (int) Sizes.NodeSize.value / 2), paintLine);
     }
 
     public static void drawDirectedEdge(Canvas canvas, Button t1, Button t2, Paint paintLine, Paint paintArrow) {
-        GraphDrawUtil.drawUndirectedEdge(canvas,t1,t2,paintLine);
-        GraphDrawUtil.drawArrow(canvas,t1,t2,paintArrow);
+        GraphDrawUtil.drawUndirectedEdge(canvas, t1, t2, paintLine);
+        GraphDrawUtil.drawArrow(canvas, t1, t2, paintArrow);
     }
 
     public static void constrainXY(int[] x, int[] y) {
@@ -59,7 +62,7 @@ public class GraphDrawUtil {
 
     }
 
-    public static void animateSearch(final Activity a, final Runnable onUiAnimatorStop, final float speedPerMove, final BlockingQueue<AlgoSimulationData> changeQueue) {
+    public static void animateSearch(final Activity a, final Runnable onUiAnimatorStop, final float speedPerMove, final BlockingQueue<AlgoSimulationStepData> changeQueue) {
         final Button[] temp = new Button[1];
         final int[] color = new int[1];
 
@@ -70,9 +73,9 @@ public class GraphDrawUtil {
 
                 // Stuff that updates the UI
                 try {
-                    AlgoSimulationData algoSimulationData = changeQueue.take();
-                    temp[0] = algoSimulationData.getNodeButton();
-                    color[0] = algoSimulationData.getColor();
+                    AlgoSimulationStepData algoSimulationStepData = changeQueue.take();
+                    temp[0] = algoSimulationStepData.getNodeButton();
+                    color[0] = algoSimulationStepData.getColor();
                     temp[0].setBackgroundResource(color[0]);
 
                 } catch (InterruptedException e) {
@@ -156,11 +159,11 @@ public class GraphDrawUtil {
 
     }
 
-    private static void drawArrow(Canvas canvas,Button src,Button dest, Paint paintArrow) {
-        double node1X = src.getX()+ (int) Sizes.NodeSize.value / 2;
-        double node1Y = src.getY()+ (int) Sizes.NodeSize.value / 2;
-        double node2X = dest.getX()+ (int) Sizes.NodeSize.value / 2;
-        double node2Y = dest.getY()+ (int) Sizes.NodeSize.value / 2;
+    private static void drawArrow(Canvas canvas, Button src, Button dest, Paint paintArrow) {
+        double node1X = src.getX() + (int) Sizes.NodeSize.value / 2;
+        double node1Y = src.getY() + (int) Sizes.NodeSize.value / 2;
+        double node2X = dest.getX() + (int) Sizes.NodeSize.value / 2;
+        double node2Y = dest.getY() + (int) Sizes.NodeSize.value / 2;
 
         double arrowAngle = Math.toRadians(10.0);
         double arrowLength = 60.0;

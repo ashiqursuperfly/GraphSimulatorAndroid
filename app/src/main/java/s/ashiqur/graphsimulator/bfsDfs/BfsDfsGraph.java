@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 
-import s.ashiqur.graphsimulator.graph.AlgoSimulationData;
+import s.ashiqur.graphsimulator.graph.AlgoSimulationStepData;
 import s.ashiqur.graphsimulator.graph.AnimatableGraph;
 
 import static android.graphics.Color.WHITE;
@@ -15,14 +15,14 @@ import static android.graphics.Color.WHITE;
 
 public class BfsDfsGraph implements AnimatableGraph {
 
+    StringBuffer bfsVisitedSequence;
     private int nVertices, nEdges;
     private ArrayList<Button> nodeButtons;
     private boolean directed;
-    private BlockingQueue<AlgoSimulationData> changeNodeColorQueue;
+    private BlockingQueue<AlgoSimulationStepData> algoSteps;
     private int time = 0;
     private int[][] matrix; //adjacency matrix to store the graph
-    private int [] color, parent, dist, discoveryTime, finishTime;
-    StringBuffer bfsVisitedSequence;
+    private int[] color, parent, dist, discoveryTime, finishTime;
     private StringBuffer dfsVisitedSequence;
 
 
@@ -36,8 +36,13 @@ public class BfsDfsGraph implements AnimatableGraph {
     }
 
     @Override
-    public void setChangeNodeColorQueue(BlockingQueue<AlgoSimulationData> animationChangeQueue) {
-        this.changeNodeColorQueue = animationChangeQueue;
+    public void setAlgoSimulationStepsQueue(BlockingQueue<AlgoSimulationStepData> animationChangeQueue) {
+        this.algoSteps = animationChangeQueue;
+    }
+
+    @Override
+    public ArrayList<Button> getNodeButtons() {
+        return nodeButtons;
     }
 
     @Override
@@ -45,23 +50,6 @@ public class BfsDfsGraph implements AnimatableGraph {
         this.nodeButtons = nodeButtons;
     }
 
-    public void setnVertices(int n) {
-        this.nVertices = n;
-
-        //allocate space for the matrix
-        matrix = new int[nVertices][nVertices];
-        color = new int[nVertices];
-        parent = new int[nVertices];
-        dist = new int[nVertices];
-        discoveryTime = new int[nVertices];
-        finishTime = new int[nVertices];
-        for (int i = 0; i < nVertices; i++) {
-            matrix[i] = new int[nVertices];
-            for (int j = 0; j < nVertices; j++)
-                matrix[i][j] = 0; //initialize the matrix cells to 0
-        }
-
-    }
 
     public void addEdge(int u, int v) {
         //write your code here
@@ -135,7 +123,7 @@ public class BfsDfsGraph implements AnimatableGraph {
             color[i] = UNVISITED;
 
             if (nodeButtons.get(i) != null) {
-                changeNodeColorQueue.add(new AlgoSimulationData(nodeButtons.get(i),UNVISITED));
+                algoSteps.add(new AlgoSimulationStepData(nodeButtons.get(i), UNVISITED));
             }
 
             //System.out.println(nodeButtons.size()+" "+i);
@@ -144,23 +132,23 @@ public class BfsDfsGraph implements AnimatableGraph {
             parent[i] = -1;
             dist[i] = INFINITY;
         }
-        Queue q = new LinkedList();
+        Queue<Integer> q = new LinkedList<>();
         color[source] = MARKED;
         if (nodeButtons.get(source) != null) {
-            changeNodeColorQueue.add(new AlgoSimulationData(nodeButtons.get(source),MARKED));
+            algoSteps.add(new AlgoSimulationStepData(nodeButtons.get(source), MARKED));
         }
 
         dist[source] = 0;
         q.add(source);
         while (!q.isEmpty()) {
             //complete this part
-            int visited = (int) q.remove();
+            int visited = q.remove();
             color[visited] = VISITED;
             if (nodeButtons.get(visited) != null) {
-                changeNodeColorQueue.add(new AlgoSimulationData(nodeButtons.get(visited),VISITED));
+                algoSteps.add(new AlgoSimulationStepData(nodeButtons.get(visited), VISITED));
             }
             //nodeButtons.get(visited).setBackgroundColor(VISITED);
-            bfsVisitedSequence.append(visited + "--");
+            bfsVisitedSequence.append(visited).append("--");
             System.out.println(visited + "->");
 
             for (int i = 0; i < nVertices; i++) {
@@ -172,7 +160,7 @@ public class BfsDfsGraph implements AnimatableGraph {
                         q.add(neighbourOfV);
                         color[neighbourOfV] = MARKED;
                         if (nodeButtons.get(neighbourOfV) != null) {
-                            changeNodeColorQueue.add(new AlgoSimulationData(nodeButtons.get(neighbourOfV),MARKED));
+                            algoSteps.add(new AlgoSimulationStepData(nodeButtons.get(neighbourOfV), MARKED));
                         }//nodeButtons.get(neighbourOfV).setBackgroundColor(MARKED);
                         dist[neighbourOfV] = dist[visited] + 1;
                         parent[neighbourOfV] = visited;
@@ -185,12 +173,12 @@ public class BfsDfsGraph implements AnimatableGraph {
     }
 
     public void dfs(int source) {
-        changeNodeColorQueue.clear();
+        algoSteps.clear();
         dfsVisitedSequence.delete(0, dfsVisitedSequence.length());
         time = 0;
         for (int i = 0; i < nodeButtons.size(); i++) {
             color[i] = UNVISITED;
-            changeNodeColorQueue.add(new AlgoSimulationData(nodeButtons.get(i),color[i]));
+            algoSteps.add(new AlgoSimulationStepData(nodeButtons.get(i), color[i]));
             parent[i] = -1;
         }
 
@@ -205,7 +193,7 @@ public class BfsDfsGraph implements AnimatableGraph {
     public int getDist(int u, int v) {
         //returns the shortest path distance from u to v
         //must call bfs using u as the source vertex, then use distance array to find the distance
-        if (u < 0 || u >= nVertices || u >= nVertices || v >= nVertices) {
+        if (u < 0 || v < 0 || u >= nVertices || v >= nVertices) {
             System.out.println("Invalid Index\n");
             return 0; //vertex out of range
         }
@@ -270,11 +258,11 @@ public class BfsDfsGraph implements AnimatableGraph {
         time++;
         discoveryTime[vertex] = time;
         System.out.println("Visit :" + vertex + "\n");
-        dfsVisitedSequence.append("Visit :" + vertex + "\n");
+        dfsVisitedSequence.append("Visit :").append(vertex).append("\n");
 
 
         color[vertex] = MARKED;
-        changeNodeColorQueue.add(new AlgoSimulationData(nodeButtons.get(vertex),color[vertex]));
+        algoSteps.add(new AlgoSimulationStepData(nodeButtons.get(vertex), color[vertex]));
         for (int i = 0; i < nVertices; i++) {
             if ((matrix[vertex][i] == 1) && (color[i] == UNVISITED)) {
                 parent[i] = vertex;
@@ -282,27 +270,40 @@ public class BfsDfsGraph implements AnimatableGraph {
             }
         }
         color[vertex] = VISITED;
-        changeNodeColorQueue.add(new AlgoSimulationData(nodeButtons.get(vertex),color[vertex]));
+        algoSteps.add(new AlgoSimulationStepData(nodeButtons.get(vertex), color[vertex]));
 
         time++;
         System.out.println("Leave :" + vertex);
         // dfsVisitedSequence.append("Leave :" + vertex);
-        dfsVisitedSequence.append("Leave :" + vertex + "\n");
+        dfsVisitedSequence.append("Leave :").append(vertex).append("\n");
         finishTime[vertex] = time;
         // dfsVisitedSequence.append("\n");
-        return;
     }
 
     public int getnVertices() {
         return nVertices;
     }
 
-    public int getnEdges() {
-        return nEdges;
+    public void setnVertices(int n) {
+        this.nVertices = n;
+
+        //allocate space for the matrix
+        matrix = new int[nVertices][nVertices];
+        color = new int[nVertices];
+        parent = new int[nVertices];
+        dist = new int[nVertices];
+        discoveryTime = new int[nVertices];
+        finishTime = new int[nVertices];
+        for (int i = 0; i < nVertices; i++) {
+            matrix[i] = new int[nVertices];
+            for (int j = 0; j < nVertices; j++)
+                matrix[i][j] = 0; //initialize the matrix cells to 0
+        }
+
     }
 
-    public ArrayList<Button> getNodeButtons() {
-        return nodeButtons;
+    public int getnEdges() {
+        return nEdges;
     }
 
     public boolean isDirected() {

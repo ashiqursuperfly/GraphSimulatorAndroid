@@ -3,9 +3,9 @@ package s.ashiqur.graphsimulator.graph;
 import android.view.View;
 
 public class GraphNodeButtonData {
-    private float x,y;
-    private String btnText;
     int resID;
+    private float x, y;
+    private String btnText;
     private View.OnDragListener onDragListener;
     private View.OnTouchListener onTouchListener;
     private View.OnClickListener onClickListener;
