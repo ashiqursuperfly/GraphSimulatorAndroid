@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayoutBFS"
+    android:layout_width="match_parent"
+    android:background="@color/backGroundLite"
+    android:layout_height="match_parent"
+    tools:context="s.ashiqur.graphsimulator.BfsDfsActivity">
+
+
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutSettings"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="@android:color/white">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editTextNvertices"
+                android:layout_width="@dimen/twoHundreddp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="# of Nodes(default7)"
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/eTstartNode"
+                android:layout_width="@dimen/twoHundreddp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="StartNode(default 0)(Valid 0toN-1) "
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/eTBFSspeed"
+                android:layout_width="@dimen/twoHundreddp"
+                android:layout_height="wrap_content"
+
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="SecondsPerMove(default 1,Max 5)"
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="33dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkBoxDirection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="Dir" />
+
+            <Button
+                android:id="@+id/buttonDone"
+                style="@style/Widget.AppCompat.Button.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/basicButtonsLite"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Apply" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+    <Button
+        android:id="@+id/buttonHideBFSSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/relativeLayoutSettings"
+        android:layout_alignParentEnd="true"
+        android:background="@color/basicButtonsLite"
+        android:fontFamily="sans-serif-condensed"
+        android:text="HideAll" />
+
+
+    <TextView
+        android:id="@+id/tvBfsDEBUG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="274dp"
+        android:text="DEBUG" />
+
+        <!--android:visibility="invisible" -->
+    <TextView
+        android:id="@+id/textViewSearchStat"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fourHundreddp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:fontFamily="sans-serif-condensed"
+        android:maxLines="100000"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/black"
+        android:scrollbars="vertical"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="18sp"
+        android:visibility="invisible" />
+
+    <s.ashiqur.graphsimulator.views.CustomView
+        android:id="@+id/customView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="invisible" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonAddEdge"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/basicButtonsLite"
+            android:text="Add/\nRemove\n Edge"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+
+        <Button
+            android:id="@+id/buttonBFSstart"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@color/basicButtonsLite"
+            android:text="BFS"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/buttonRefresh"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/white"
+            android:text="Reset"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonDFSstart"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@color/basicButtonsLite"
+            android:text="DFS"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonSearchStats"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@color/basicButtonsLite"
+            android:text="Stats"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonAlgo"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@color/basicButtonsLite"
+            android:text="Algo"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
