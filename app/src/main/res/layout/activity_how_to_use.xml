@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     android:background="@color/backGroundLite"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="vertical"
     tools:context=".HowToUseActivity">
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:orientation="vertical">
         <TextView
             android:id="@+id/textView2"
+            android:textColor="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:textSize="18sp"
             android:text="Entering Graph Properties :"
             android:textAlignment="viewStart"
             android:textAllCaps="true"
@@ -32,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
 
+            android:textColor="@android:color/black"
             android:text="1.Enter Number Of Nodes in your Graph.\n\n2.Enter The Node from which you want to start the BFS/DFS\n\n3.Enter The Speed(Seconds per Step) in which you wish to simulate your BFS/DFS(You can Change this anytime as you need)\n\n4.Tick the 'Dir' CheckBox if your Graph is Directed.\n\n5.Once you are done hit 'Apply'
         "
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -44,6 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Drawing And Playing With your Graph:"
+            android:textSize="18sp"
+            android:textColor="@color/colorPrimaryDark"
             android:textAllCaps="true"
             android:textStyle="bold" />
 
@@ -52,11 +56,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+
+            android:textColor="@android:color/black"
             android:text="1.Tap Anywhere to Create A Node.\n\n2.Select Two Nodes and press Add/Remove Edge button to Create an Edge\n\n3.In Case of a Directed Edge,e.g from Node 2 to Node 3,you must select Node 2 first and then 3 and Finally Press Add/Remove Edge Button.\n\n4.You Can Drag and Drop The Nodes to Draw the Graph as you need.\n\n5.Once You're Done hit either BFS or DFS button. \n\n6.The Graph traversal will be animated.\n\n7.You can also find the search BFS/DFS Stats at the Stats Tab.\n\n
 
 "
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
     </LinearLayout>
-    </ScrollView>
 
-</RelativeLayout>
+
+</ScrollView>

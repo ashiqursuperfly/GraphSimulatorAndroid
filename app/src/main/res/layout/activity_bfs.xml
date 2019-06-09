@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:background="@color/backGroundLite"
     android:layout_height="match_parent"
-    tools:context="s.ashiqur.graphsimulator.BfsDfsActivity">
+    tools:context="s.ashiqur.graphsimulator.bfsDfs.BfsDfsActivity">
 
 
 
@@ -127,7 +127,7 @@
         android:textSize="18sp"
         android:visibility="invisible" />
 
-    <s.ashiqur.graphsimulator.views.CustomView
+    <s.ashiqur.graphsimulator.bfsDfs.BfsDfsView
         android:id="@+id/customView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

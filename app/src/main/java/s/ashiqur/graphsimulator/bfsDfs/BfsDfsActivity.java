@@ -1,4 +1,4 @@
-package s.ashiqur.graphsimulator;
+package s.ashiqur.graphsimulator.bfsDfs;
 
 import android.content.ClipData;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +8,6 @@ import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -21,11 +20,15 @@ import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import s.ashiqur.graphsimulator.views.CustomView;
-import s.ashiqur.graphsimulator.views.Size;
+import s.ashiqur.graphsimulator.graph.AlgoSimulationData;
+import s.ashiqur.graphsimulator.graph.GraphDrawUtil;
+import s.ashiqur.graphsimulator.graph.GraphConstants;
+import s.ashiqur.graphsimulator.graph.GraphNodeButtonData;
+import s.ashiqur.graphsimulator.R;
+import s.ashiqur.graphsimulator.Sizes;
 
 
-public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
+public class BfsDfsActivity extends AppCompatActivity implements GraphConstants {
 
 
     private class SingleTapConfirm extends GestureDetector.SimpleOnGestureListener {
@@ -40,7 +43,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
         }
     }
     ///XML VARIABLES
-    private CustomView customView;
+    private BfsDfsView customView;
     private RelativeLayout relativeLayoutBFS;
     private RelativeLayout relativeLayoutSettings;
     private TextView tvBFS;
@@ -65,8 +68,8 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
     private ArrayList<Button> nodeButtons;
     private ArrayList<Button> selectedButtons;
     private static int nodeCount=0;
-    public Graph graph;
-    public BlockingQueue changeNodeColorQueue ;
+    public BfsDfsGraph graph;
+    public BlockingQueue<AlgoSimulationData> changeNodeColorQueue ;
     private int currentDraggedNode;
     private float speedPerMove;
     private int startNode;
@@ -90,6 +93,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
 
 
     }
+
     private void initializeJavaVariables()
     {
 
@@ -97,7 +101,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
         changeNodeColorQueue=new ArrayBlockingQueue(1000);
         selectedButtons=new ArrayList<>();
         nodeButtons=new ArrayList<>();
-        graph=new Graph(false,nodeButtons);
+        graph=new BfsDfsGraph(false,nodeButtons);
         startNode=0;
         speedPerMove=1;
         nVertices=7;
@@ -108,11 +112,12 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
 
 
     }
+
     private void initializeXmlVariables()
     {
 
         //Views and Layouts
-        customView = (CustomView) findViewById(R.id.customView);
+        customView = findViewById(R.id.customView);
         relativeLayoutBFS=findViewById(R.id.relativeLayoutBFS);
         relativeLayoutSettings=findViewById(R.id.relativeLayoutSettings);
         //TExtView
@@ -139,6 +144,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
 
 
     }
+
     private void addDragListeners()
     {
         ///THIS LISTENER is for the receiving the drops
@@ -160,7 +166,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
                         tvBFS.setText("Drop Co-Ordinates :" +event.getX() + " "+ event.getY());
                         int[] x={(int) event.getX()};
                         int []y={(int) event.getY()};
-                        constrainXY(x,y);
+                        GraphDrawUtil.constrainXY(x,y);
 
                         nodeButtons.get(currentDraggedNode).setX((float) x[0]);
                         nodeButtons.get(currentDraggedNode).setY((float) y[0]);
@@ -198,6 +204,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
             }
         };
     }
+
     private void addTouchListeners()
     {
         handleTouch=new View.OnTouchListener() {
@@ -264,7 +271,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
                 switch (view.getId()) {
                     case R.id.buttonDone: {
 
-                        System.out.println("Clciked");
+                        System.out.println("Clicked");
                         try {
                             String temp = eTStartNode.getText() + "";
                             String temp2 = eTBFSspeed.getText() + "";
@@ -275,7 +282,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
                             //if(temp3.equalsIgnoreCase(""))throw new Exception();
 
                             int prevNvertices = nVertices;
-                            boolean prevDir = graph.directed;
+                            boolean prevDir = graph.isDirected();
                             if(!temp.equalsIgnoreCase(""))startNode = Integer.parseInt(temp);
                             if(!temp2.equalsIgnoreCase(""))speedPerMove = Float.parseFloat(temp2);
                             if(!temp3.equalsIgnoreCase(""))nVertices = Integer.parseInt(temp3);
@@ -327,7 +334,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
                         int u = selectedButtons.get(0).getId() - NODE_RES_ID_START;
                         int v = selectedButtons.get(1).getId() - NODE_RES_ID_START;
                         if (graph.isEdge(u, v)) {
-                            Toast.makeText(getApplicationContext(), "Already An Edge", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "Already An Edge", Toast.LENGTH_SHORT).show();
                             buttonAddEdge.setEnabled(true);
                             graph.removeEdge(u, v);
                             graph.printGraph();
@@ -418,7 +425,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
                             }
                             customView.setVisibility(View.INVISIBLE);
                             relativeLayoutSettings.setVisibility(View.INVISIBLE);
-                            buttonHideBFSsettings.setY((float)(Size.YOFFSET.value/7));
+                            buttonHideBFSsettings.setY((float)(Sizes.YOffset.value/7));
                             if ((buttonHideBFSsettings.getText() + "").equalsIgnoreCase("HideAll"))
                                 buttonHideBFSsettings.setText("ShowAll");
                         } else {
@@ -433,7 +440,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
                             if ((buttonHideBFSsettings.getText() + "").equalsIgnoreCase("ShowAll")) {
                                 customView.setVisibility(View.VISIBLE);
                                 //relativeLayoutSettings.setVisibility(View.VISIBLE);
-                                //buttonHideBFSsettings.setY((float) (Size.YOFFSET.value*1.8));
+                                //buttonHideBFSsettings.setY((float) (Size.YOffset.value*1.8));
                                 //buttonHideBFSsettings.setText("HideAll");
                             }
                         }
@@ -470,7 +477,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
         relativeLayoutSettings.setVisibility(View.INVISIBLE);
 
         buttonHideBFSsettings.setText("ShowAll");
-        buttonHideBFSsettings.setY((float)(Size.YOFFSET.value/7));
+        buttonHideBFSsettings.setY((float)(Sizes.YOffset.value/7));
 
     }
     else
@@ -484,7 +491,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
             relativeLayoutSettings.setVisibility(View.VISIBLE);
 
             buttonHideBFSsettings.setText("HideAll");
-            buttonHideBFSsettings.setY((float) (Size.YOFFSET.value*4.2));
+            buttonHideBFSsettings.setY((float) (Sizes.YOffset.value*4.2));
         }
 
     }
@@ -494,7 +501,7 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
         selectedButtons.clear();
         changeNodeColorQueue.clear();
         //  tvBFS.setText(graph.nVertices+"");
-        graph=new Graph(checkBoxDirection.isChecked(),nodeButtons);
+        graph=new BfsDfsGraph(checkBoxDirection.isChecked(),nodeButtons);
         graph.setnVertices(nVertices);
              nodeCount=0;
         for (Button b: nodeButtons)
@@ -507,72 +514,32 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
         nodeButtons.clear();
 
     }
+
     private void createNode(int x,int y)
     {
         //RelativeLayout.LayoutParams relativeLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
 
-        Button tempButton = new Button(this);
 
-        if(nodeCount>=graph.nVertices)
+        if(nodeCount>=graph.getnVertices())
         {
             Toast.makeText(getApplicationContext(),"Cant add more Nodes!"+"Already Added "+nVertices+" nodes",Toast.LENGTH_LONG).show();
             return;
         }
 
-
         // Add the Buttons to the View
 
-        setButtonProperties(tempButton,nodeCount+"",x,y,(int) Size.NODESIZE.value,(int) Size.NODESIZE.value, DESELECTED);
+        Button btn = GraphDrawUtil.createNodeButton(relativeLayoutBFS,this,new GraphNodeButtonData(x,y,nodeCount+"",NODE_RES_ID_START +nodeCount,handleDrag,handleTouch,null));
         //These Lines MUST be after addView();
 
-        nodeButtons.add(tempButton);
+        nodeButtons.add(btn);
         graph.setNodeButtons(nodeButtons);
         nodeCount++;
 
     }
-    private void constrainXY(int [] x,int [] y)
-    {
-        if(x[0]>=Size.XLIMIT.value )x[0]=(int)(Size.XLIMIT.value);
-        if(x[0]<=Size.XOFFSET.value)x[0]=(int )Size.XOFFSET.value;
 
-        if(y[0]>=Size.YLIMIT.value )y[0]=(int)(Size.YLIMIT.value);
-        if(y[0]<=Size.YOFFSET.value)y[0]=(int )Size.YOFFSET.value;
-
-    }
-    private void setButtonProperties(Button b,String text,int x,int y,int width,int height,int color)
-    {
-        int ax[]={x};
-        int ay[]={y};
-        constrainXY(ax,ay);
-        tvBFS.setText("DispH :"+Size.HEIGHT.value+"DispW :"+Size.WIDTH.value +"("+x+","+y+")" );
-        LayoutAddButton(b, RelativeLayout.ALIGN_PARENT_START, ax[0], ay[0], 0, 0);
-
-        relativeLayoutBFS.removeView(b);
-        relativeLayoutBFS.addView(b);
-        ViewGroup.LayoutParams params = b.getLayoutParams();
-        b.setText(text);
-        b.setTextSize((float) Size.NODETEXTSIZE.value);
-        params.height=RelativeLayout.LayoutParams.WRAP_CONTENT;
-        params.width=width;
-        b.setLayoutParams(params);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            // only for MArshMellow and newer versions
-            System.out.println("Android Version :"+android.os.Build.VERSION.SDK_INT);
-            b.setTextAppearance(R.style.TextAppearance_AppCompat_Small);
-        }
-        b.setBackgroundResource(R.drawable.round_button_deselected);
-        b.setTextColor(NODETEXTCOLOR);
-        b.setOnDragListener(handleDrag);
-        b.setOnTouchListener(handleTouch);
-        b.setId(NODE_RES_ID_START +nodeCount);
-
-    }
     private void selectOrDeselectButton(Button b)
     {
-
-
-
         if(selectedButtons.size()<=2) {
 
             if(!selectedButtons.contains(b) ) {
@@ -596,7 +563,6 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
             else if(selectedButtons.contains(b)) {
                 b.setBackgroundResource(DESELECTED);
                 selectedButtons.remove(b);
-
             }
             }
 
@@ -606,11 +572,12 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
              buttonAddEdge.setEnabled(true);
          }
     }
-    void animateSearch()
+
+    private void animateSearch()
     {
-
-
-
+        buttonBfsStart.setEnabled(false);
+        buttonDfsStart.setEnabled(false);
+        buttonAddEdge.setEnabled(false);
 
 
         final Button[] temp = new Button[1];
@@ -624,70 +591,8 @@ public class BfsDfsActivity extends AppCompatActivity implements GraphConstants{
 
             }
         };
-        final Runnable onUiAnimatorStart =  new Runnable() {
-
-            @Override
-            public void run() {
-
-                // Stuff that updates the UI
-                try {
-                    buttonBfsStart.setEnabled(false);
-                    buttonDfsStart.setEnabled(false);
-                    buttonAddEdge.setEnabled(false);
-
-                    temp[0] =(Button) changeNodeColorQueue.take();
-                    color[0] =(int)changeNodeColorQueue.take();
-                    temp[0].setBackgroundResource(color[0]);
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        };
-         Thread thread = new Thread(){
-            @Override
-            public void run() {
-
-                synchronized (this) {
-                while(!changeNodeColorQueue.isEmpty())
-                {
-                long start=  System.currentTimeMillis();;
-                runOnUiThread(onUiAnimatorStart);
-                while(System.currentTimeMillis()-start<speedPerMove*1000)
-                {
-                    if(changeNodeColorQueue.isEmpty())runOnUiThread(onUiAnimatorStop);
-                };
-                }
-                 runOnUiThread(onUiAnimatorStop);
-                }
-
-
+        GraphDrawUtil.animateSearch(BfsDfsActivity.this,onUiAnimatorStop,speedPerMove,changeNodeColorQueue);
     }
 
-    };
-        thread.start();
-//        try {
-//            thread.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-
-    }
-
-    private void LayoutAddButton(Button button, int centerInParent, int marginLeft, int marginTop, int marginRight, int marginBottom) {
-
-        // Defining the layout parameters of the Button
-        RelativeLayout.LayoutParams buttonLayoutParameters = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        // Add Margin to the LayoutParameters
-        buttonLayoutParameters.setMargins(marginLeft, marginTop, marginRight, marginBottom);
-        // Add Rule to Layout
-        buttonLayoutParameters.addRule(centerInParent);
-        // Setting the parameters on the Button
-        button.setLayoutParams(buttonLayoutParameters);
-
-    }
 
 }

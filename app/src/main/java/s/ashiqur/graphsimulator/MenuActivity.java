@@ -1,4 +1,5 @@
 package s.ashiqur.graphsimulator;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import s.ashiqur.graphsimulator.views.Size;
+import s.ashiqur.graphsimulator.bfsDfs.BfsDfsActivity;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -39,11 +40,9 @@ public class MenuActivity extends AppCompatActivity {
         addOnClickListeners();
 
 
-
-
     }
-    private void addOnClickListeners()
-    {
+
+    private void addOnClickListeners() {
         buttonBfsDFs.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -51,7 +50,7 @@ public class MenuActivity extends AppCompatActivity {
                 tvCoordinates.setText("BFS");
                 v.startAnimation(animRotate);
 
-                Intent mIntent = new Intent(MenuActivity.this,BfsDfsActivity.class);
+                Intent mIntent = new Intent(MenuActivity.this, BfsDfsActivity.class);
                 startActivity(mIntent);
 
                 //v.clearAnimation();
@@ -59,12 +58,11 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         });
-        buttonHowTo.setOnClickListener(new View.OnClickListener()
-        {
+        buttonHowTo.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent(MenuActivity.this,HowToUseActivity.class);
+                Intent mIntent = new Intent(MenuActivity.this, HowToUseActivity.class);
                 startActivity(mIntent);
 
             }
@@ -77,53 +75,53 @@ public class MenuActivity extends AppCompatActivity {
         });
 
     }
-    private void initializeSizeVariables()
-    {
+
+    private void initializeSizeVariables() {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        Size.HEIGHT.setValue( displayMetrics.heightPixels);
-        Size.WIDTH.setValue(displayMetrics.widthPixels);
+        Sizes.ScreenHeight.setValue(displayMetrics.heightPixels);
+        Sizes.ScreenWidth.setValue(displayMetrics.widthPixels);
         int size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.textSize);
-        Size.NODETEXTSIZE.setValue(size);
-        size= getApplicationContext().getResources().getDimensionPixelSize(R.dimen.xoffset);
-        Size.XOFFSET.setValue(size);
-        size= getApplicationContext().getResources().getDimensionPixelSize(R.dimen.yoffset);
+        Sizes.NodeTextSize.setValue(size);
+        size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.xoffset);
+        Sizes.XOffset.setValue(size);
+        size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.yoffset);
 
-        Size.YOFFSET.setValue(size);
-        Size.XLIMIT.setValue(Size.WIDTH.value-2*Size.XOFFSET.value);
-        Size.YLIMIT.setValue(Size.HEIGHT.value-9*Size.YOFFSET.value);///TODO:check 10.5 for multiple devices
+        Sizes.YOffset.setValue(size);
+        Sizes.XLimit.setValue(Sizes.ScreenWidth.value - 2 * Sizes.XOffset.value);
+        Sizes.YLimit.setValue(Sizes.ScreenHeight.value - 9 * Sizes.YOffset.value);///TODO:check 10.5 for multiple devices
 
-        //Size.NODESIZE.setValue(Math.sqrt(Size.XLIMIT.value* Size.YLIMIT.value/125));//TODO :check 125 for multiple devices
-        size= getApplicationContext().getResources().getDimensionPixelSize(R.dimen.nodeSize);
-        Size.NODESIZE.setValue(size);
+        //Size.NodeSize.setValue(Math.sqrt(Size.XLimit.value* Size.YLimit.value/125));//TODO :check 125 for multiple devices
+        size = getApplicationContext().getResources().getDimensionPixelSize(R.dimen.nodeSize);
+        Sizes.NodeSize.setValue(size);
 
     }
-    private void addTouchListeners()
-    {
+
+    private void addTouchListeners() {
         relativeLayoutMenu.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                float x=event.getX();
-                float y=event.getY();
-                if(MenuActivity.DEBUG)tvCoordinates.setText("Coordinates("+x+","+y+")");
+                float x = event.getX();
+                float y = event.getY();
+                if (MenuActivity.DEBUG) tvCoordinates.setText("Coordinates(" + x + "," + y + ")");
                 return false;
             }
         });
 
     }
-    private void initializeXmlVariables()
-    {
-        relativeLayoutMenu=findViewById(R.id.relativeLayoutMenu);
-        tvCoordinates=findViewById(R.id.tvCoordinates);
-        buttonBfsDFs =findViewById(R.id.buttonBFS);
-        buttonHowTo=findViewById(R.id.buttonHowTo);
-        buttonExit=findViewById(R.id.buttonExit);
-        animZoomin=(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoomin));
-        animBlink=(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.blink_anim));
-        animBounce=(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.bounce));
-        animRotate=(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate));
+
+    private void initializeXmlVariables() {
+        relativeLayoutMenu = findViewById(R.id.relativeLayoutMenu);
+        tvCoordinates = findViewById(R.id.tvCoordinates);
+        buttonBfsDFs = findViewById(R.id.buttonBFS);
+        buttonHowTo = findViewById(R.id.buttonHowTo);
+        buttonExit = findViewById(R.id.buttonExit);
+        animZoomin = (AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoomin));
+        animBlink = (AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blink_anim));
+        animBounce = (AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce));
+        animRotate = (AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate));
 
 
     }

@@ -1,11 +1,13 @@
-package s.ashiqur.graphsimulator;
+package s.ashiqur.graphsimulator.graph;
 
 import android.graphics.Color;
+
+import s.ashiqur.graphsimulator.R;
 
 
 public interface GraphConstants {
 
-    int MARKED =R.drawable.round_button_marked ;
+    int MARKED = R.drawable.round_button_marked ;
     int SELECTED =R.drawable.round_button_selected;
     int UNVISITED =R.drawable.round_button_unmarked;
     int VISITED =R.drawable.round_button_visited;

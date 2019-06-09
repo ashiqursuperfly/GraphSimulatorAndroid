@@ -16,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BfsDfsActivity" />
+        <activity android:name=".bfsDfs.BfsDfsActivity" />
         <activity android:name=".HowToUseActivity"></activity>
     </application>
 
