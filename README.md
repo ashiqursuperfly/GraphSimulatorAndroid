@@ -6,5 +6,6 @@
 ###### Variable Simulation Speed
 ###### Very Easy to extend and support more Algorithms
 
-![](https://github.com/ashiqursuperfly/GraphSimulatorAndroid/blob/master/test.gif)
-![](https://github.com/ashiqursuperfly/GraphSimulatorAndroid/blob/master/test2.gif)
+<img src="https://github.com/ashiqursuperfly/GraphSimulatorAndroid/blob/master/test.gif"/>
+
+<img src="https://github.com/ashiqursuperfly/GraphSimulatorAndroid/blob/master/test2.gif"/>
